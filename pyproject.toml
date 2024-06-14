@@ -1,0 +1,14 @@
+[project]
+name = "unwdef-nodes-comfyui"
+description = "Custom nodes for ComfyUI by unwdef."
+version = "1.0.0"
+license = "LICENSE"
+
+[project.urls]
+Repository = "https://github.com/unwdef/unwdef-nodes-comfyui"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "unwdef-nodes-comfyui"
+Icon = ""
