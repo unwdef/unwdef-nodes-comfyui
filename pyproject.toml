@@ -2,7 +2,7 @@
 name = "unwdef-nodes-comfyui"
 description = "Custom nodes for ComfyUI by unwdef."
 version = "1.0.0"
-license = "LICENSE"
+license = { file = "LICENSE" }
 
 [project.urls]
 Repository = "https://github.com/unwdef/unwdef-nodes-comfyui"
