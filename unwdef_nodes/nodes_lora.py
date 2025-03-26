@@ -14,6 +14,7 @@ class RandomizeLoras:
                 "model": ("MODEL",),
                 "clip": ("CLIP", ),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
+                "min_random": ("INT", {"default": 1, "min": 1, "max": 10}),
                 "max_random": ("INT", {"default": 10, "min": 1, "max": 10}),
             }
         }
@@ -30,7 +31,7 @@ class RandomizeLoras:
     FUNCTION = "load_lora"
     CATEGORY = "unwdef/lora"
 
-    def load_lora(self, model, clip, seed, max_random, **kwargs):      
+    def load_lora(self, model, clip, seed, min_random, max_random, **kwargs):      
         if seed is not None:
           random.seed(seed)  # For reproducibility
 
@@ -58,9 +59,15 @@ class RandomizeLoras:
         if len(lora_configs) == 0:
             return (model, clip, chosen_trigger_words, chosen_str)
         
-        # Adjust max_random
-        if (max_random > len(lora_configs)):
-            max_random = len(lora_configs)
+        # Cap min_random and max_random to length of lora configs
+        min_random = min(min_random, len(lora_configs))
+        max_random = min(max_random, len(lora_configs))
+
+        # Make sure max_random >= min_random
+        max_random = max(min_random, max_random)        
+
+        # Randomly choose some of these loras
+        chosen_loras = random.sample(lora_configs, random.randint(min_random, max_random))
 
         # Randomly choose some of these loras
         chosen_loras = random.sample(lora_configs, random.randint(1, max_random))
@@ -100,6 +107,7 @@ class RandomizeLorasStack:
         inputs = {
             "required": {
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
+                "min_random": ("INT", {"default": 1, "min": 1, "max": 10}),
                 "max_random": ("INT", {"default": 10, "min": 1, "max": 10}),
             }
         }
@@ -120,7 +128,7 @@ class RandomizeLorasStack:
     FUNCTION = "load_lora_stack"
     CATEGORY = "unwdef/lora"
 
-    def load_lora_stack(self, seed, max_random, lora_stack=None, **kwargs):      
+    def load_lora_stack(self, seed, min_random, max_random, lora_stack=None, **kwargs):      
         if seed is not None:
           random.seed(seed)  # For reproducibility
 
@@ -153,12 +161,15 @@ class RandomizeLorasStack:
         if len(lora_configs) == 0:
             return (lora_list, chosen_trigger_words, chosen_str, )
         
-        # Adjust max_random
-        if (max_random > len(lora_configs)):
-            max_random = len(lora_configs)
+        # Cap min_random and max_random to length of lora configs
+        min_random = min(min_random, len(lora_configs))
+        max_random = min(max_random, len(lora_configs))
+
+        # Make sure max_random >= min_random
+        max_random = max(min_random, max_random)  
 
         # Randomly choose some of these loras
-        chosen_loras = random.sample(lora_configs, random.randint(1, max_random))
+        chosen_loras = random.sample(lora_configs, random.randint(min_random, max_random))
 
         for lora in chosen_loras:
             # Randomly determine a value between min_str and max_str
