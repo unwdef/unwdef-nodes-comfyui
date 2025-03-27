@@ -69,9 +69,6 @@ class RandomizeLoras:
         # Randomly choose some of these loras
         chosen_loras = random.sample(lora_configs, random.randint(min_random, max_random))
 
-        # Randomly choose some of these loras
-        chosen_loras = random.sample(lora_configs, random.randint(1, max_random))
-
         for lora in chosen_loras:
             # Randomly determine a value between min_str and max_str
             strength = random.uniform(lora['min_str'], lora['max_str'])
